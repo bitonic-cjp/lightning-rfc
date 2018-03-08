@@ -72,7 +72,7 @@ The following use cases were identified:
   channel and re-use Lightning routing information for performance reasons.
   Examples of recurring payments would be monthly salary payments and
   automatic payments for subscriptions. Examples of streaming of micropayments
-  would be paying for the use of a Wifi hot-spot or paying for watching a
+  would be paying for the use of a WiFi hot-spot or paying for watching a
   streaming movie on a website.
   As in the previous use case, it is possible with BOLT #11 to create a new
   invoice for every new payment, but it would be really inconvenient if there
