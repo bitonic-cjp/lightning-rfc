@@ -136,6 +136,15 @@ TODO
 * Optional inclusion of an invoice ID, for replacement of BOLT #11 functionality
 * Fall-back modes? E.g. on-chain payment
 
+        payer                            payee
+          |<-- URL ------------------------|
+          |    |- hostname                 |
+          |    |- port (optional)          |
+          |    |- pubkey (optional?)       |
+          |    |- Invoice ID (optional)    |
+          |
+        Connect
+
 # Protocol specification
 TODO
 * Feature bits, for extensibility
@@ -149,6 +158,7 @@ TODO
           |    |- purpose (optional)       |
           |    |- refund pubkey (optional) |
           |    |- expiry time (optional)   |
+          |    |- Invoice ID (optional)    |
           |                                |
           |<-- Invoice (signed) -----------|
           |    |- amount (optional)        |
