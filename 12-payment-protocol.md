@@ -139,8 +139,8 @@ TODO
         payer                            payee
           |<-- URL ------------------------|
           |    |- hostname                 |
-          |    |- port (optional)          |
-          |    |- pubkey (optional?)       |
+          |    |- port       (optional)    |
+          |    |- pubkey     (optional?)   |
           |    |- Invoice ID (optional)    |
           |
         Connect
@@ -154,15 +154,15 @@ TODO
 
         payer                            payee
           |--- Get invoice --------------->|
-          |    |- amount (optional)        |
-          |    |- purpose (optional)       |
+          |    |- amount        (optional) |
+          |    |- purpose       (optional) |
           |    |- refund pubkey (optional) |
-          |    |- expiry time (optional)   |
-          |    |- Invoice ID (optional)    |
+          |    |- expiry time   (optional) |
+          |    |- Invoice ID    (optional) |
           |                                |
           |<-- Invoice (signed) -----------|
-          |    |- amount (optional)        |
-          |    |- purpose (optional)       |
+          |    |- amount        (optional) |
+          |    |- purpose       (optional) |
           |    |- refund pubkey (optional) |
           |    |- payment hash             |
           |    |- expiry time              |
