@@ -107,6 +107,93 @@ same communication channel.
 Finally, the communication channel may be used to exchange routing information
 between payer and payee, potentially making it easier to find a route.
 
+
+## Proof of Payment
+A signed invoice, together with the corresponding payment preimage, can be used
+by the payer as a proof of payment. The primary use case for a proof of payment
+is to act as evidence in front of a dispute settlement provider, in case there
+is disagreement between payer and payee on whether or not the payee is subject
+to the obligations specified in the description field of an invoice. Scenarios
+where either payer or payee is hacked, resulting in a theft of funds by the
+hacker, are of particular interest:
+
+* If the payee is hacked, and the payee's computers send an not-correctly-signed
+  invoice to the payer, the payer should not perform the payment.
+* If the payee is not hacked, sends out a correctly signed invoice but refuses
+  to fulfill the obligations in the invoice despite being paid, the payer should
+  be able to enforce the obligations in the invoice by showing the proof of
+  payment.
+* If the payee is hacked, and the payee's computers send a correctly-signed
+  invoice to the payer (which sends funds to the hacker), this is
+  indistinguishable from the previous case from the point of view of both payer
+  and dispute settlement provider. Therefore, the end result should be the same.
+  In other words: the payee is responsible for protecting his own computers
+  against hackers. Note that, in order to prevent a hacker from profiting by
+  sending out extremely unreasonable invoices to himself, a dispute settlement
+  provider may place limits on how unreasonable the terms in an invoice can be,
+  and order a refund instead, in case a too unreasonable invoice is disputed.
+* If the payer is not hacked, does not pay the payee but still claims to have
+  paid, and demands the payee to fulfill the obligations in a fake
+  proof of payment, the proof of payment will not be correct: either the
+  signature is not valid, or the preimage is not valid, or both. The payer
+  should not be able to enforce the obligations in the invoice by showing the
+  invalid proof of payment.
+* If the payer is hacked, and the payer's computer accepts a fake invoice
+  (which sends funds to the hacker), this is indistinguishable from the previous
+  case from the point of view of the dispute settlement provider. Therefore, the
+  end result should be the same. In other words: the payer is responsible for
+  protecting his own computer against hackers.
+
+
+## Public Key Infrastructure
+In order to make a proof of payment useful, it must be possible for a dispute
+settlement provider to verify the proof of payment. In particular, it must be
+possible to verify that the payment was performed to one particular payee, who
+agreed to deliver whatever was specified in the description in the invoice.
+
+The invoice is digitally signed, but this is only useful if the digital
+signature corresponds to a key that can be proven to be owned by the payee.
+"Be proven" really means "there is proof that is accepted by the dispute
+settlement provider". It would be good practice for dispute settlement providers
+to specify in advance what their policies are regarding the acceptance of such
+proofs.
+
+Such proof will typically have to consist of a key certificate that consists of
+a digital signature of the payee's public key by the key of a certificate
+authority that is recognized by the dispute settlement provider.
+
+These considerations lead to a quite centralized approach, with the risk that
+centralized entities like the dispute settlement provider can impose arbitrary
+demands on other participants, with the penalty that they will otherwise be
+unable to participate in the system. However, competition *is* possible:
+people excluded from participation by one dispute settlement provider can found
+a new one and organize around it.
+
+A different dispute settlement method would be one of a decentralized reputation
+system, where the only direct penalty would be a loss of reputation. Such a
+system would combine better with a PGP-style Web of Trust. Participants would
+not only be required to verify each others' identities and sign keys, but also
+to check whether the obligations in valid proofs of payments of others have been
+fulfilled. It is not clear how all parts of such a system would function in
+detail, but it does seem clear that offering only a single authentication path
+for the key of the payee is insufficient.
+
+Finally, there is the option of not doing any key authentication. A payer might
+perform key pinning to detect future hacks, but not otherwise perform any
+checks. Arguably, this makes the proof of payment useless for later dispute
+settlement by a third party, but it still enables payer and payee to perform
+payments.
+
+A Web of Trust is the most generic PKI shape, and it supports all these modes
+of operation. For instance, when using a single dispute settlement provider,
+there needs to be a chain of trust from that provider to the certificate that
+proves the link between the public key and the payee identity.
+
+TBD is: how is information about the chain of trust transferred to the payer?
+TLS style (embedded in the protocol) or PGP style (external, prior to the
+transaction)?
+
+
 ## Security considerations
 Data exchanged over the communication channel has to be properly encrypted and
 signed. Authenticity of the keys of the payee has to be verified by the payer.
@@ -128,6 +215,7 @@ The payee should never blindly copy the purpose of a payment from information
 supplied by the payer: otherwise a malicious payer can trick the payee into
 signing a "proof of payment" the payee never agreed to. It must always be clear
 who is the author of the "purpose of payment" text.
+
 
 # URL specification
 TODO
