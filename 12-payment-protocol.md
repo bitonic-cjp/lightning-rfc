@@ -284,7 +284,7 @@ TODO
 
         payer                            payee
           |--- Get invoice --------------->|
-          |    |- amount        (optional) |
+          |    |- amount+curr.  (optional) |
           |    |- purpose MIME  (optional) |
           |    |- purpose       (optional) |
           |    |- refund pubkey (optional) |
@@ -292,7 +292,7 @@ TODO
           |    |- Invoice ID    (optional) |
           |                                |
           |<-- Invoice (signed) -----------|
-          |    |- amount                   |
+          |    |- amount+curr.             |
           |    |- purpose MIME  (optional) |
           |    |- purpose       (optional) |
           |    |- purpose author           |
