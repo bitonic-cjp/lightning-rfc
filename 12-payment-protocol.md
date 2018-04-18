@@ -194,6 +194,35 @@ TLS style (embedded in the protocol) or PGP style (external, prior to the
 transaction)?
 
 
+## Transport Layer protocol
+The protocol described here can be built on top of any transport layer protcol
+that provides reliable bidirectional data streams, like TCP. However, selection
+of an appropriate transport layer protocol *is* relevant, because it has an
+impact on, for instance, the privacy of participants, and the possibility of
+censorship. It is expected to be more important for this protocol than for the
+peer communication protocol because it is expected to be easier to find
+Lightning peers who support your uncommon transport protocol than it is to find
+merchants who support your uncommon transport protocol *and* sell what you want
+at a decent price.
+
+Some examples of transport layer protocols that can be considered:
+
+* TCP/IP:
+  Offers little privacy for client nor server.
+  IP addresses and host names may be taken down.
+  A TOR-using client can connect to a TCP/IP server through a TOR exit node.
+* TOR hidden services:
+  Offers substantial privacy for client and server.
+  Hidden service names can normally not be taken down, unless the operator is
+  hacked or identified.
+  A TCP/IP-using client can connect to a hidden service through a gateway like
+  [onion.to](https://onion.to/).
+* Bluetooth (e.g. RFCOMM):
+  Only suitable for payments in physical proximity.
+  Provides privacy and protection against being taken down by being local-only
+  and temporary.
+
+
 ## Security considerations
 Data exchanged over the communication channel has to be properly encrypted and
 signed. Authenticity of the keys of the payee has to be verified by the payer.
