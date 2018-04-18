@@ -249,9 +249,10 @@ who is the author of the "purpose of payment" text.
 # URL specification
 TODO
 * Support for the same address types as in BOLT #7 (incl. TOR)
-* Inclusion of the public key?
+* Inclusion of the public key
 * Optional inclusion of an invoice ID, for replacement of BOLT #11 functionality
 * Fall-back modes? E.g. on-chain payment
+* Multiple URLs merged into one for multiple transport modes
 
         payer                            payee
           |<-- URL ------------------------|
@@ -262,24 +263,39 @@ TODO
           |
         Connect
 
+TCP/IP:    <DNS> or <IPv4> or <IPv6>
+TOR:       <pubkeyhash>.onion
+Bluetooth: <MAC>[/<ResourceName>]
+
+
 # Protocol specification
 TODO
 * Feature bits, for extensibility
 * Maybe let this be an extension to the regular peer protocol, so a node only
   has to keep a single port open
+* Offer multiple partial onion routes, in case some fail
+* Full-featured replacement invoices, signed by both parties
+* X.509 data
+* Optional behavior regarding external WoT, certificate pinning
+* Full-featured invoice replacement
+* To Null state if contract is fulfilled (optional)
+* On reconnect, specify which invoice to talk about
 * DoS protection
 
         payer                            payee
           |--- Get invoice --------------->|
           |    |- amount        (optional) |
+          |    |- purpose MIME  (optional) |
           |    |- purpose       (optional) |
           |    |- refund pubkey (optional) |
           |    |- expiry time   (optional) |
           |    |- Invoice ID    (optional) |
           |                                |
           |<-- Invoice (signed) -----------|
-          |    |- amount        (optional) |
+          |    |- amount                   |
+          |    |- purpose MIME  (optional) |
           |    |- purpose       (optional) |
+          |    |- purpose author           |
           |    |- refund pubkey (optional) |
           |    |- payment hash             |
           |    |- expiry time              |
