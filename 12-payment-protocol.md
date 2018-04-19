@@ -247,28 +247,30 @@ who is the author of the "purpose of payment" text.
 
 
 # URI specification
+
+## Format
 A lnpay URI has the following format:
 
-lnpay:[<pubkeyhash>]?[id=<id>&]r0=<host>[&r1=<host>[...]]
+&lt;uri&gt; = lnpay:[&lt;pubkeyhash&gt;]?[id=&lt;id&gt;&]r0=&lt;host&gt;[&r1=&lt;host&gt;[...]]
 
-##pubkeyhash
+### pubkeyhash
 Used for invoice signing and as trust root for the encryption
 TODO: encoding, signature + hash algorithm
 
-##id
+### id
 TODO: allowed characters
 
-##host
+### host
 TCP/IP:
-<host> = tcp:{<dnsname>|<ipv4>|<ipv6>}[:<portnumber>]
+&lt;host&gt; = tcp:{&lt;dnsname&gt;|&lt;ipv4&gt;|&lt;ipv6&gt;}[:&lt;portnumber&gt;]
 
 TOR:
-<host> = tor:<TOR-pubkeyhash>.onion[:<portnumber>]
+&lt;host&gt; = tor:&lt;TOR-pubkeyhash&gt;.onion[:&lt;portnumber&gt;]
 
 Bluetooth:
-<host> = bt:<MAC>[/<ResourceName>]
+&lt;host&gt; = bt:&lt;MAC&gt;[/&lt;ResourceName&gt;]
 
-##Usage
+## Usage
 Typically, the payee generates an URI, and sends this URI to the payer, for
 instance through a QR code, NFC, or a link on a website or in an e-mail.
 However, it is not necessarily the payee who generates the URI. The URI is just
