@@ -15,8 +15,8 @@ over the Lightning network.
 This BOLT is an unfinished draft, and will be changed in the future.
 
 # Introduction
-This BOLT provides an alternative to BOLT #11, and is intended to support a
-wider range of use cases.
+This BOLT provides an alternative to [BOLT #11](01-payment-encoding.md), and is
+intended to support a wider range of use cases.
 
 ## Use cases
 The following use cases were identified:
@@ -29,15 +29,16 @@ The following use cases were identified:
   payment, available to the payer. This can help, for instance, for dispute
   settlement on who owns certain goods.
   Since the payment hash is specified, such an invoice can only be used once.
-  This use case is covered by BOLT #11, with the following limitations:
+  This use case is covered by [BOLT #11](01-payment-encoding.md), with the
+  following limitations:
   * The destination has to be specified as a node ID. This reveals the node ID
     of the payee to the payer, reducing privacy for the payee. In use cases
     where refunds are a possibility, the payer becomes the payee, so the same
     privacy reduction also happens in the opposite direction.
   * The maximum length of an embedded description of the purpose of the payment
     is 639 bytes. For longer descriptions a hash of the description is included
-    instead, but BOLT #11 does not specify how the description itself is to be
-    transmitted to the payer.
+    instead, but [BOLT #11](01-payment-encoding.md) does not specify how the
+    description itself is to be transmitted to the payer.
 * One-off donations.
   Same as the first use case, except the payee does not specify the amount
   to be paid. The payer is free to choose an amount.
@@ -47,8 +48,8 @@ The following use cases were identified:
   for instance, to create public transparency in the minimum amount received
   through donations.
   Since the payment hash is specified, such an invoice can only be used once.
-  This use case is covered by BOLT #11, with the same limitations as the first
-  use case.
+  This use case is covered by [BOLT #11](01-payment-encoding.md), with the same
+  limitations as the first use case.
 * Payments initiated by payer.
   Payer contacts payee to perform a payment and sends a description of the
   purpose of the payment and the amount to be paid.
@@ -64,8 +65,9 @@ The following use cases were identified:
   the BTC immediately paid out through Lightning, the user doesn't want to
   have to manually write an invoice and submit it to the exchange at the moment
   the order is executed.
-  It is possible to *manually* perform this procedure using BOLT #11, but there
-  is no standardized protocol for *automatically* following this procedure.
+  It is possible to *manually* perform this procedure using
+  [BOLT #11](01-payment-encoding.md), but there is no standardized protocol
+  for *automatically* following this procedure.
 * Recurring payments and streaming of micropayments.
   Same procedure as for the previous use case. In the case of streaming of
   micropayments, payer and payee might want to keep an open communication
@@ -74,9 +76,10 @@ The following use cases were identified:
   automatic payments for subscriptions. Examples of streaming of micropayments
   would be paying for the use of a WiFi hot-spot or paying for watching a
   streaming movie on a website.
-  As in the previous use case, it is possible with BOLT #11 to create a new
-  invoice for every new payment, but it would be really inconvenient if there
-  is no way to automate this.
+  As in the previous use case, it is possible with
+  [BOLT #11](01-payment-encoding.md) to create a new invoice for every new
+  payment, but it would be really inconvenient if there is no way to automate
+  this.
 
 ## Overview
 To eliminate the limitations of BOLT11 in these use cases, this BOLT specifies a
@@ -297,9 +300,9 @@ TODO
 # Encryption layer
 
 On top of the selected transport layer, an encryption layer is applied.
-This encryption layer is identical to BOLT8, except for the following
-differences:
-* Prior to following BOLT8, the following data is exchanged:
+This encryption layer is identical to [BOLT #8](08-transport.md), except for
+the following differences:
+* Prior to following [BOLT #8](08-transport.md), the following data is exchanged:
 
   ```
   &lt;- s
@@ -319,11 +322,11 @@ TODO
 # Messaging layer
 
 On top of the encryption layer, a messaging layer is applied.
-This messaging layer is identical to BOLT1, with the exception of the set of
-message types. The following message groups are defined instead of the ones
-listed in BOLT1:
+This messaging layer is identical to [BOLT #1](01-messaging.md), with the
+exception of the set of message types. The following message groups are defined
+instead of the ones listed in [BOLT #1](01-messaging.md):
 * Setup & Control (types `0`-`31`):
-  identical to the message types in BOLT1.
+  identical to the message types in [BOLT #1](01-messaging.md).
 * Identification & Authentication (types `32768`-`33023`):
   messages related to identification and authentication
   (described below)
