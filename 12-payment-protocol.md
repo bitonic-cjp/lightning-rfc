@@ -344,16 +344,19 @@ instead of the ones listed in [BOLT #1](01-messaging.md):
 TODO
 
 
-# Protocol specification
+# Identification & Authentication
+
 TODO
-* Offer multiple partial onion routes, in case some fail
-* Full-featured replacement invoices, signed by both parties
 * X.509 data
 * Optional behavior regarding external WoT, certificate pinning
-* Full-featured invoice replacement
+
+
+# Invoice management
+
+TODO
+* Full-featured replacement invoices, signed by both parties
 * To Null state if contract is fulfilled (optional)
 * On reconnect, specify which invoice to talk about
-* DoS protection
 
         payer                            payee
           |--- Get invoice --------------->|
@@ -372,14 +375,6 @@ TODO
           |    |- refund pubkey (optional) |
           |    |- payment hash             |
           |    |- expiry time              |
-          |                                |
-          |--- Get destination ----------->|
-          |    |- payment hash             |
-          |                                |
-          |<-- Destination ----------------|
-          |    |- partial onion route      |
-          |                                |
-        Start payment
 
 Repeat if desired, or close the connection afterwards.
 Payee can also ask for an invoice; typically in the case of a refund: a refund
@@ -387,6 +382,23 @@ invoice should be signed with the refund key so that it invalidates the original
 invoice as proof of payment.
 
 Any request for an invoice can be denied.
+
+
+# Routing
+
+TODO
+* Offer multiple partial onion routes, in case some fail
+
+        payer                            payee
+          |--- Get destination ----------->|
+          |    |- payment hash             |
+          |                                |
+          |<-- Destination ----------------|
+          |    |- partial onion route      |
+
+
+TODO
+* DoS protection
 
 
 # Authors
