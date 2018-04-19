@@ -302,27 +302,38 @@ differences:
 * Prior to following BOLT8, the following data is exchanged:
 
   ```
-  -&gt; HASH160(s)
   &lt;- s
   ```
 
-  The initiator sends the HASH160 of the static public key of the responder;
-  this hash is given to the initiator as the `pubkeyhash` value in the URI.
-  Upon reception of `s`, the initiator MUST verify that it corresponds to the
-  sent HASH160(s), and terminate the connection otherwise.
-
-  In the case that no `pubkeyhash` is given in the URI, the following data is
-  exchanged instead:
-
-  ```
-  -&gt; 20 zero-value bytes
-  &lt;- s
-  ```
-
-  In this case, no check is performed by the initiator on the received value of
-  `s`.
-
+  The responder sends its static public key to the initiator.
+  If a `pubkeyhash` value is given in the URI, the initiator MUST verify
+  that HASH160(s) equals the `pubkeyhash` value, and terminate the connection
+  otherwise.
 * `prologue` is the ASCII string `lnpay` instead of `lightning`
+
+## Rationale
+
+TODO
+
+
+# Messaging layer
+
+On top of the encryption layer, a messaging layer is applied.
+This messaging layer is identical to BOLT1, with the exception of the set of
+message types. The following message groups are defined instead of the ones
+listed in BOLT1:
+* Setup & Control (types `0`-`31`):
+  identical to the message types in BOLT1.
+* Identification & Authentication (types `32768`-`33023`):
+  messages related to identification and authentication
+  (described below)
+* Invoice management (types `33024`-`33279`):
+  Messages related to requesting, sending and updating invoices.
+  (described below)
+* Routing (types `33280`-`33536`):
+  Messages related to setting up a route.
+  (described below)
+
 
 ## Rationale
 
@@ -331,9 +342,6 @@ TODO
 
 # Protocol specification
 TODO
-* Feature bits, for extensibility
-* Maybe let this be an extension to the regular peer protocol, so a node only
-  has to keep a single port open
 * Offer multiple partial onion routes, in case some fail
 * Full-featured replacement invoices, signed by both parties
 * X.509 data
