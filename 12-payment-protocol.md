@@ -328,6 +328,8 @@ exception of the set of message types. The following message groups are defined
 instead of the ones listed in [BOLT #1](01-messaging.md):
 * Setup & Control (types `0`-`31`):
   identical to the message types in [BOLT #1](01-messaging.md).
+  Global feature flags are identical to those defined in [BOLT #9](09-features.md).
+  There are currently no local feature flags.
 * Identification & Authentication (types `32768`-`33023`):
   messages related to identification and authentication
   (described below)
