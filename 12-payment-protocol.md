@@ -15,7 +15,7 @@ over the Lightning network.
 This BOLT is an unfinished draft, and will be changed in the future.
 
 # Introduction
-This BOLT provides an alternative to [BOLT #11](01-payment-encoding.md), and is
+This BOLT provides an alternative to [BOLT #11](11-payment-encoding.md), and is
 intended to support a wider range of use cases.
 
 ## Use cases
@@ -29,7 +29,7 @@ The following use cases were identified:
   payment, available to the payer. This can help, for instance, for dispute
   settlement on who owns certain goods.
   Since the payment hash is specified, such an invoice can only be used once.
-  This use case is covered by [BOLT #11](01-payment-encoding.md), with the
+  This use case is covered by [BOLT #11](11-payment-encoding.md), with the
   following limitations:
   * The destination has to be specified as a node ID. This reveals the node ID
     of the payee to the payer, reducing privacy for the payee. In use cases
@@ -37,7 +37,7 @@ The following use cases were identified:
     privacy reduction also happens in the opposite direction.
   * The maximum length of an embedded description of the purpose of the payment
     is 639 bytes. For longer descriptions a hash of the description is included
-    instead, but [BOLT #11](01-payment-encoding.md) does not specify how the
+    instead, but [BOLT #11](11-payment-encoding.md) does not specify how the
     description itself is to be transmitted to the payer.
 * One-off donations.
   Same as the first use case, except the payee does not specify the amount
@@ -48,7 +48,7 @@ The following use cases were identified:
   for instance, to create public transparency in the minimum amount received
   through donations.
   Since the payment hash is specified, such an invoice can only be used once.
-  This use case is covered by [BOLT #11](01-payment-encoding.md), with the same
+  This use case is covered by [BOLT #11](11-payment-encoding.md), with the same
   limitations as the first use case.
 * Payments initiated by payer.
   Payer contacts payee to perform a payment and sends a description of the
@@ -66,7 +66,7 @@ The following use cases were identified:
   have to manually write an invoice and submit it to the exchange at the moment
   the order is executed.
   It is possible to *manually* perform this procedure using
-  [BOLT #11](01-payment-encoding.md), but there is no standardized protocol
+  [BOLT #11](11-payment-encoding.md), but there is no standardized protocol
   for *automatically* following this procedure.
 * Recurring payments and streaming of micropayments.
   Same procedure as for the previous use case. In the case of streaming of
@@ -77,17 +77,17 @@ The following use cases were identified:
   would be paying for the use of a WiFi hot-spot or paying for watching a
   streaming movie on a website.
   As in the previous use case, it is possible with
-  [BOLT #11](01-payment-encoding.md) to create a new invoice for every new
+  [BOLT #11](11-payment-encoding.md) to create a new invoice for every new
   payment, but it would be really inconvenient if there is no way to automate
   this.
 
 ## Overview
-To eliminate the limitations of BOLT11 in these use cases, this BOLT specifies a
-protocol where payee gives a URL to one or more potential payers. Payers can use
-the URL to open a communication channel to payee to request invoices.
-The same URL can be accessed multiple times and can be used by multiple payers
-for multiple payments. The URL will typically be short enough to fit in a QR
-code.
+To eliminate the limitations of [BOLT #11](11-payment-encoding.md) in these use
+cases, this BOLT specifies a protocol where payee gives a URL to one or more
+potential payers. Payers can use the URL to open a communication channel to
+payee to request invoices. The same URL can be accessed multiple times and can
+be used by multiple payers for multiple payments. The URL will typically be short
+enough to fit in a QR code.
 
 In cases where anonymity of the payee has to be preserved, an URL scheme has to
 be used which protects this anonymity. An example of this would be an URL that
@@ -98,10 +98,11 @@ to payer which has a partial onion route as destination instead of a node ID.
 The partial onion route ends at the payee, but it can start at some other node.
 All the payer has to do is prepend this partial route with extra hops, so that
 the complete route starts at the payer. Note that this makes the invoice
-considerably larger; this would have been infeasible in BOLT #11.
+considerably larger; this would have been infeasible in
+[BOLT #11](11-payment-encoding.md).
 
-Similarly, allowing for much larger description fields than in BOLT #11 is not a
-problem anymore.
+Similarly, allowing for much larger description fields than in
+[BOLT #11](11-payment-encoding.md) is not a problem anymore.
 
 To allow for convenient and potentially anonymous refunds, the communication
 channel can be kept open, and the payer can send a refund invoice through the
