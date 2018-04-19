@@ -254,8 +254,9 @@ A lnpay URI has the following format:
 &lt;uri&gt; = lnpay:[&lt;pubkeyhash&gt;]?[id=&lt;id&gt;&]r0=&lt;host&gt;[&r1=&lt;host&gt;[...]]
 
 ### pubkeyhash
-Used for invoice signing and as trust root for the encryption
-TODO: encoding, signature + hash algorithm
+The HASH160 of a public key on Bitcoin's `secp256k1` curve.
+Used for invoice signing and as trust root for the encryption.
+TODO: encoding
 
 ### id
 TODO: allowed characters
@@ -270,6 +271,8 @@ TOR:
 Bluetooth:
 &lt;host&gt; = bt:&lt;MAC&gt;[/&lt;ResourceName&gt;]
 
+TODO: default port number (and Bluetooth resource name?).
+
 ## Usage
 Typically, the payee generates an URI, and sends this URI to the payer, for
 instance through a QR code, NFC, or a link on a website or in an e-mail.
@@ -280,8 +283,46 @@ As soon as two parties are connected, they are peers, with the only (optional)
 difference being that the URI-receiving party has received the pubkeyhash of the
 URI-sending party.
 
+The party writing the URI SHOULD be reachable on all hosts provided with the
+r0, r1, ... arguments, for at least as long as needed to finish the transaction.
+
 TODO
-* Fall-back modes? E.g. on-chain payment
+* Fall-back modes? E.g. on-chain payment, BOLT11
+
+## Rationale
+
+TODO
+
+
+# Encryption layer
+
+On top of the selected transport layer, an encryption layer is applied.
+This encryption layer is identical to BOLT8, except for the following
+differences:
+* Prior to following BOLT8, the following data is exchanged:
+
+  ```
+  -&gt; HASH160(s)
+  &lt;- s
+  ```
+
+  The initiator sends the HASH160 of the static public key of the responder;
+  this hash is given to the initiator as the `pubkeyhash` value in the URI.
+  Upon reception of `s`, the initiator MUST verify that it corresponds to the
+  sent HASH160(s), and terminate the connection otherwise.
+
+  In the case that no `pubkeyhash` is given in the URI, the following data is
+  exchanged instead:
+
+  ```
+  -&gt; 20 zero-value bytes
+  &lt;- s
+  ```
+
+  In this case, no check is performed by the initiator on the received value of
+  `s`.
+
+* `prologue` is the ASCII string `lnpay` instead of `lightning`
 
 ## Rationale
 
