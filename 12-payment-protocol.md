@@ -14,7 +14,7 @@ over the Lightning network.
 # Status
 This BOLT is an unfinished draft, and will be changed in the future.
 
-# Rationale
+# Introduction
 This BOLT provides an alternative to BOLT #11, and is intended to support a
 wider range of use cases.
 
@@ -246,26 +246,44 @@ signing a "proof of payment" the payee never agreed to. It must always be clear
 who is the author of the "purpose of payment" text.
 
 
-# URL specification
+# URI specification
+A lnpay URI has the following format:
+
+lnpay:[<pubkeyhash>]?[id=<id>&]r0=<host>[&r1=<host>[...]]
+
+##pubkeyhash
+Used for invoice signing and as trust root for the encryption
+TODO: encoding, signature + hash algorithm
+
+##id
+TODO: allowed characters
+
+##host
+TCP/IP:
+<host> = tcp:{<dnsname>|<ipv4>|<ipv6>}[:<portnumber>]
+
+TOR:
+<host> = tor:<TOR-pubkeyhash>.onion[:<portnumber>]
+
+Bluetooth:
+<host> = bt:<MAC>[/<ResourceName>]
+
+##Usage
+Typically, the payee generates an URI, and sends this URI to the payer, for
+instance through a QR code, NFC, or a link on a website or in an e-mail.
+However, it is not necessarily the payee who generates the URI. The URI is just
+a means of bootstrapping a connection.
+
+As soon as two parties are connected, they are peers, with the only (optional)
+difference being that the URI-receiving party has received the pubkeyhash of the
+URI-sending party.
+
 TODO
-* Support for the same address types as in BOLT #7 (incl. TOR)
-* Inclusion of the public key
-* Optional inclusion of an invoice ID, for replacement of BOLT #11 functionality
 * Fall-back modes? E.g. on-chain payment
-* Multiple URLs merged into one for multiple transport modes
 
-        payer                            payee
-          |<-- URL ------------------------|
-          |    |- hostname                 |
-          |    |- port       (optional)    |
-          |    |- pubkey     (optional?)   |
-          |    |- Invoice ID (optional)    |
-          |
-        Connect
+## Rationale
 
-TCP/IP:    <DNS> or <IPv4> or <IPv6>
-TOR:       <pubkeyhash>.onion
-Bluetooth: <MAC>[/<ResourceName>]
+TODO
 
 
 # Protocol specification
