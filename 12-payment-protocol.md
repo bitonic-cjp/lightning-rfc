@@ -348,9 +348,123 @@ TODO
 
 # Identification & Authentication
 
+          |--- get_certs------------------>|
+          |                                |
+          |<-- cert------------------------|
+          |    |- X.509 cert               |
+          |                                |
+          |<-- cert------------------------|
+          |    |- X.509 cert               |
+          |                                |
+          |<-- ... ------------------------|
+
+
+## The `get_certs` Message
+This message requests authentication certificates from the other node.
+
+1. type: 32768 (`get_certs`)
+
+### Requirements
+The sending node MAY:
+
+* send a `get_certs` message at any time during a connection session.
+
+The sending node SHOULD NOT:
+
+* send more than one `get_certs` message during a connection session.
+
+The receiving node MUST:
+
+* send one or more `certs` messages as a reply.
+
+
+## The `cert` message
+This message sends an authentication certificate to the other node.
+
+1. type: 32769 (`cert`)
+2. data:
+    - [`1: remaining_certs`]
+    - [`data_len-1: certificate`]
+
+### Requirements
+The sending node MUST NOT
+
+* send `cert` messages, except as a reply to a `get_certs` message.
+
+The sending node MUST
+
+* set `remaining_certs` equal to the number of `cert` messages that will follow
+  this message.
+* set `certificate` equal to a valid X.509 certificate. This means, among other
+  things, that the certificate must be syntactically correct, must not be
+  expired, and must have a valid signature.
+
+The sending node SHOULD NOT
+
+* send certificates that use cryptographic algorithms with known vulnerabilities.
+
+In the set of certificates contained in the entire chain of `cert` messages,
+the sending node MUST include exactly one chain of certificates, called the
+'internal chain', that has the following properties:
+
+  - The chain contains at least one certificate.
+  - Each certificate in the chain, except the last one, signs the key that is
+    used to sign the next certificate in the chain.
+  - The last certificate in the chain signs the key that is used to sign
+    invoices, and, in case of the responder, is used as the static public key
+    in the Encryption layer.
+  - All "Issuer name" and "Subject name" values in all certificates are
+    identical.
+  - All "Issuer Unique Identifier" and "Subject Unique Identifier" values, if
+    present, are identical in all certificates.
+
+The sending node SHOULD
+
+* use the same key to sign the first certificate of the 'internal chain' in all
+  connection sessions.
+
+In the set of certificates contained in the entire chain of `cert` messages,
+the sending node MAY include one or more chains of certificates, called the
+'external chains', that satisfy all of the following conditions:
+
+  - Each certificate in the chain, except the last one, signs the key that is
+    used to sign the next certificate in the chain.
+  - The last certificate in the chain signs the key that is used to sign
+    the first certificate in the 'internal chain'.
+  - None of the certificates in the chain has an "Issuer name" identical to the
+    name used in the 'internal chain'.
+  - None of the certificates in the chain has an "Issuer Unique Identifier"
+    identical to the Unique Identifier used in the 'internal chain'.
+
+The receiving node MUST terminate the connection, unless all of the following
+conditions are satisfied:
+
+  - `remaining_certs` is decrementing as expected in subsequent
+    `cert` messages.
+  - `certificate` equals valid X.509 certificate. This means, among
+    other things, that the certificate must be syntactically correct, must not
+    be expired, and must have a valid signature.
+
+The receiving node MUST discard all certificates that use cryptographic
+algorithms with known vulnerabilities.
+
+
+The receiving node MUST terminate the connection, unless all of the following
+conditions are satisfied:
+
+  - There is exactly one chain that has all the properties of the
+    'internal chain'.
+
+
+## Rationale
+
 TODO
-* X.509 data
+
+TODO
 * Optional behavior regarding external WoT, certificate pinning
+* What versions of X.509? RFC 5280?
+* Is there a need for more than ~64k for certificates?
+* Good description on when initiator should accept a key
 
 
 # Invoice management
